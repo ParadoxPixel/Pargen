@@ -1,8 +1,8 @@
-package main
+package Pargen
 
 import "github.com/ParadoxPixel/Pargen/parser"
 
-func main() {
+func example() {
 	gen, err := NewGen(
 		"./files/in",
 		"./files/parsed",

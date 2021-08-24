@@ -1,4 +1,4 @@
-package main
+package Pargen
 
 import (
 	"fmt"
@@ -14,13 +14,13 @@ import (
 type Gen struct {
 	in        string
 	inAbs     string
-	parsed	  string
+	parsed    string
 	parsedAbs string
 	update    bool
 	Parser    *parser.Parser
 }
 
-func NewDefaultGen(in , parsed string, f func(string)string) (*Gen, error) {
+func NewDefaultGen(in, parsed string, f func(string) string) (*Gen, error) {
 	return NewGen(
 		in,
 		parsed,
@@ -30,7 +30,7 @@ func NewDefaultGen(in , parsed string, f func(string)string) (*Gen, error) {
 	)
 }
 
-func NewGen(in , parsed string, update bool, regex *regexp.Regexp, f func(string)string) (*Gen, error) {
+func NewGen(in, parsed string, update bool, regex *regexp.Regexp, f func(string) string) (*Gen, error) {
 	inAbs, err := filepath.Abs(in)
 	if err != nil {
 		return nil, err
@@ -51,7 +51,7 @@ func NewGen(in , parsed string, update bool, regex *regexp.Regexp, f func(string
 	}, nil
 }
 
-func(g *Gen) Initialize() error {
+func (g *Gen) Initialize() error {
 	var err error
 	if err = g.Prepare(); err != nil {
 		return err
@@ -60,7 +60,7 @@ func(g *Gen) Initialize() error {
 	return g.ParseAll()
 }
 
-func(g *Gen) Prepare() error {
+func (g *Gen) Prepare() error {
 	var err error
 	if _, err = os.Stat(g.inAbs); os.IsNotExist(err) {
 		if err = os.MkdirAll(g.inAbs, 0700); err != nil {
@@ -75,7 +75,7 @@ func(g *Gen) Prepare() error {
 	return nil
 }
 
-func(g *Gen) ParseAll() error {
+func (g *Gen) ParseAll() error {
 	return filepath.Walk(g.inAbs, func(fileName string, info os.FileInfo, err error) error {
 		if info.IsDir() {
 			return err
@@ -85,7 +85,7 @@ func(g *Gen) ParseAll() error {
 	})
 }
 
-func(g *Gen) ParseFile(fileName string) error {
+func (g *Gen) ParseFile(fileName string) error {
 	fileName, err := filepath.Abs(fileName)
 	if err != nil {
 		return err
@@ -119,7 +119,6 @@ func(g *Gen) ParseFile(fileName string) error {
 		str = "{{define \"" + filepath.Join(dir, strings.TrimSuffix(fileName, ".temp.html")) + "\"}}\n" + str + "\n{{end}}"
 	}
 
-
 	bytes = []byte(str)
 	f, err := os.OpenFile(filepath.Join(parsed, fileName), os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
 	if err != nil {
@@ -134,7 +133,7 @@ func(g *Gen) ParseFile(fileName string) error {
 	return f.Close()
 }
 
-func(g *Gen) Load(fm template.FuncMap) (*template.Template, error) {
+func (g *Gen) Load(fm template.FuncMap) (*template.Template, error) {
 	templates := template.New("")
 	if fm != nil {
 		templates.Funcs(fm)
@@ -149,7 +148,7 @@ func(g *Gen) Load(fm template.FuncMap) (*template.Template, error) {
 			return nil
 		}
 
-		if 5 >= len(path) || path[len(path) - 5:] != ".html" {
+		if 5 >= len(path) || path[len(path)-5:] != ".html" {
 			return nil
 		}
 
