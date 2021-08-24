@@ -159,6 +159,7 @@ func (g *Gen) Load(fm template.FuncMap) (*template.Template, error) {
 
 		name := filepath.ToSlash(rel)
 		name = strings.TrimSuffix(name, ".html")
+		name = strings.TrimSuffix(name, ".temp")
 		buf, err := ioutil.ReadFile(path)
 		if err != nil {
 			return err
