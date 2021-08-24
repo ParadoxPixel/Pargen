@@ -6,18 +6,18 @@ import (
 )
 
 var (
-	DefaultRegex = regexp.MustCompile("%([^\\s\\\\]+)%")
+	DefaultRegex = regexp.MustCompile("\\%([^\\s\\\\]+)\\%")
 )
 
 type Parser struct {
 	regex *regexp.Regexp
-	f func(string)string
+	f     func(string) string
 }
 
-func NewParser(regex *regexp.Regexp, f func(string)string) *Parser {
+func NewParser(regex *regexp.Regexp, f func(string) string) *Parser {
 	return &Parser{
 		regex: regex,
-		f: f,
+		f:     f,
 	}
 }
 
