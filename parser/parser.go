@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	DefaultRegex = regexp.MustCompile("\\%([^\\s\\\\]+)\\%")
+	DefaultRegex = regexp.MustCompile("\\%(([^\\s\\\\%]|[ ])+)\\%")
 )
 
 type Parser struct {
