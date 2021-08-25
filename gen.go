@@ -115,7 +115,6 @@ func (g *Gen) ParseFile(fileName string) error {
 	str := string(bytes)
 	str = g.Parser.Parse(str)
 	if strings.HasSuffix(fileName, ".temp.html") {
-		fmt.Println(filepath.Join(dir, strings.TrimSuffix(fileName, ".temp.html")))
 		str = "{{define \"" + filepath.Join(dir, strings.TrimSuffix(fileName, ".temp.html")) + "\"}}\n" + str + "\n{{end}}"
 	}
 
